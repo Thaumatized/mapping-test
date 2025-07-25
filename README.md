@@ -1,0 +1,1 @@
+clear; gcc main.c regular-array.c -o mapping-test; ./mapping-test -l 1024 -m 100000000 -c 1000000
