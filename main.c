@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
         // Otherwise the remainder is inaccessible from the top of the range.
         int idRange = (maxId / count);
         int minId = idRange * i;
-        int id = minId + (rand() % (idRange + 1));
+        int id = minId + (rand() % (idRange));
         items[i].id = id;
         items[i].name = itemName;
         items[i].value = (rand() % 10) + 10;
@@ -158,7 +158,7 @@ void regularArrayGets(Item *items, int count) {
 
 void moduloMapInserts(Item *items, int count) {
     for(int i = 0; i < count; i++)
-    {        
+    {
         moduloMapInsert(items[i]);
     }
 }

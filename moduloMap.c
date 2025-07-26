@@ -21,6 +21,8 @@ void moduloMapInit(int length) {
 }
 
 void moduloMapFree() {
+    for(int i = 0; i < itemsLength; i++) {
+    }
     free(items);
 }
 
@@ -45,7 +47,10 @@ void makeArrayBigger() {
 
     for(int i = 0; i < oldItemsLength; i++)
     {
-        items[getIndex(oldItems[i].id)] = oldItems[i];
+        if(oldItems[i].id != DELETED_ITEM_ID && oldItems[i].id != EMPTY_ITEM_ID)
+        {
+            moduloMapInsert(oldItems[i]);
+        }
     }
     
     free(oldItems);
@@ -66,8 +71,6 @@ void moduloMapInsert(Item item) {
             index = (index + 1) % itemsLength;
         }
     } while (!found && index != itemIndex);
-
-    //printf("Item %i is going to %i, found is %i", item.id, index, found);
     
     if(found)
     {
@@ -114,8 +117,6 @@ Item moduloMapGet(int id) {
     bool found = false;
     do
     {
-        printf("Looking for %i in %i - ", id, index);
-        printf("found %i\n", items[index].id);
         if(items[index].id == EMPTY_ITEM_ID)
         {
             break; 
@@ -131,11 +132,9 @@ Item moduloMapGet(int id) {
         }
     } while (!found && index != itemIndex);
 
-    printf("Found status is %i for item %i in %i\n", found, id, index);
-
     if(found)
     {
-        return items[id];
+        return items[index];
     }
     else
     {
