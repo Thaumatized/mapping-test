@@ -6,6 +6,7 @@
 
 #include "main.h"
 #include "common.h"
+#include "itemNameGenerator.h"
 #include "regularArray.h"
 #include "moduloMap.h"
 
@@ -51,37 +52,22 @@ int main(int argc, char *argv[])
     }
 
     // Prepare items
+    initializeItemNames();
     Item *items;
     items = malloc(count*sizeof(Item));
-    FILE *fp = fopen("itemNames.txt", "r");
-    if (fp == NULL) {
-        printf("ERROR: Failed to open itemNames.txt\n" );
-        exit(1);
-    }
-    char line[1024];
     for(int i = 0; i < count; i++)
     {
-        if(fgets(line, sizeof(line), fp) == NULL)
-        {
-            // If we are out of names start from the beginning
-            fclose(fp);
-            FILE *fp = fopen("itemNames.txt", "r");
-            fgets(line, sizeof(line), fp);
-        }
-        int nameLength = strlen(line)+1;
-        char itemName[nameLength];
-        memcpy(itemName, line, nameLength);
         // This id range will allow for any id only if maxId is divisible by count.
         // Otherwise the remainder is inaccessible from the top of the range.
         int idRange = (maxId / count);
         int minId = idRange * i;
         int id = minId + (rand() % (idRange));
         items[i].id = id;
-        items[i].name = itemName;
+        items[i].name = getNextItemName();
+        printf("Item %i/%i is named %s\n", i, id, items[i].name);
         items[i].value = (rand() % 10) + 10;
         items[i].weight = (rand() % 10) + 10;
     }
-    fclose(fp);
 
     // Prepare clock
     clock_t overallStartClock, overallStopClock;
