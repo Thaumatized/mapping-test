@@ -10,4 +10,5 @@ flags explained:
 
 -l default array length
 -m maximum id
+-s step in ids; Set this to something that -l is is divisible by to hurt modulo by causing more collisions. This will effectively override -m.
 -c count
