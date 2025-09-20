@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
     // Reading arguments
 	int arrayLength = 1024;
     int maxId = 1024;
+    int idStep = 0;
 	int count = 512;
-    bool forceResize = false;
 
 	for (int i = 1; i < argc; i++)
 	{
@@ -35,20 +35,21 @@ int main(int argc, char *argv[])
 			maxId = atoi(argv[i+1]);
 			i++;
 		}
+		if (!strcmp(argv[i], "-s"))
+		{
+			idStep = atoi(argv[i+1]);
+			i++;
+		}
 		if (!strcmp(argv[i], "-c"))
 		{
 			count = atoi(argv[i+1]);
 			i++;
 		}
-		if (!strcmp(argv[i], "-r"))
-		{
-			forceResize = true;
-		}
 	}
 
-    if(count > maxId)
+    if(count > maxId && idStep == 0)
     {
-        printf("ERROR: count is larger than maxId.\n");
+        printf("ERROR: count (%i) is larger than maxId (%i) and idStep (%i) is 0\n", count, maxId, idStep);
         return 1;
     }
 
@@ -58,11 +59,21 @@ int main(int argc, char *argv[])
     items = malloc(count*sizeof(Item));
     for(int i = 0; i < count; i++)
     {
-        // This id range will allow for any id only if maxId is divisible by count.
-        // Otherwise the remainder is inaccessible from the top of the range.
-        int idRange = (maxId / count);
-        int minId = idRange * i;
-        int id = minId + (rand() % (idRange));
+        int id = 0;
+
+        if(idStep == 0)
+        {
+            // This id range will allow for any id only if maxId is divisible by count.
+            // Otherwise the remainder is inaccessible from the top of the range.
+            int idRange = (maxId / count);
+            int minId = idRange * i;
+            id = minId + (rand() % (idRange));
+        }
+        else
+        {
+            id = i * idStep;
+        }
+
         items[i].id = id;
         items[i].name = getNextItemName();
         //printf("Item %i/%i is named %s\n", i, id, items[i].name);
