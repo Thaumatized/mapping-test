@@ -15,3 +15,7 @@ void regularArrayGets(Item *items, int count);
 void moduloMapInserts(Item *items, int count);
 
 void moduloMapGets(Item *items, int count);
+
+void hashMapInserts(Item *items, int count);
+
+void hashMapGets(Item *items, int count);

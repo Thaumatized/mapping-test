@@ -9,6 +9,7 @@
 #include "itemNameGenerator.h"
 #include "regularArray.h"
 #include "moduloMap.h"
+#include "hashMap.h"
 
 int main(int argc, char *argv[])
 {
@@ -64,50 +65,71 @@ int main(int argc, char *argv[])
         int id = minId + (rand() % (idRange));
         items[i].id = id;
         items[i].name = getNextItemName();
-        printf("Item %i/%i is named %s\n", i, id, items[i].name);
+        //printf("Item %i/%i is named %s\n", i, id, items[i].name);
         items[i].value = (rand() % 10) + 10;
         items[i].weight = (rand() % 10) + 10;
     }
 
     // Prepare clock
-    clock_t overallStartClock, overallStopClock;
+    clock_t startClock, stopClock;
     waitForInput("Prepared items for tests");
 
+    // Regular Array
     regularArrayInit(arrayLength);
     waitForInput("Initialized regular array");
 
-    overallStartClock = clock();
+    startClock = clock();
     regularArrayInserts(items, count);
-    overallStopClock = clock();
-    printTime("regular array inserts", overallStartClock, overallStopClock, count);
+    stopClock = clock();
+    printTime("regular array inserts", startClock, stopClock, count);
     waitForInput("Regular array inserts done");
 
-    overallStartClock = clock();
+    startClock = clock();
     regularArrayGets(items, count);
-    overallStopClock = clock();
-    printTime("regular array gets", overallStartClock, overallStopClock, count);
+    stopClock = clock();
+    printTime("regular array gets", startClock, stopClock, count);
     waitForInput("Regular array gets done");
 	
     regularArrayFree(arrayLength);
     waitForInput("Freed regular array");
 
+    // Modulo Map
     moduloMapInit(arrayLength);
     waitForInput("Initialized modulo map");
 
-    overallStartClock = clock();
+    startClock = clock();
     moduloMapInserts(items, count);
-    overallStopClock = clock();
-    printTime("modulo map inserts", overallStartClock, overallStopClock, count);
+    stopClock = clock();
+    printTime("modulo map inserts", startClock, stopClock, count);
     waitForInput("modulo map inserts done");
 
-    overallStartClock = clock();
+    startClock = clock();
     moduloMapGets(items, count);
-    overallStopClock = clock();
-    printTime("modulo map gets", overallStartClock, overallStopClock, count);
+    stopClock = clock();
+    printTime("modulo map gets", startClock, stopClock, count);
     waitForInput("modulo map gets done");
 	
     moduloMapFree(arrayLength);
     waitForInput("Freed modulo map");
+
+    // Hash Map
+    hashMapInit(arrayLength);
+    waitForInput("Initialized hash map");
+
+    startClock = clock();
+    hashMapInserts(items, count);
+    stopClock = clock();
+    printTime("hash map inserts", startClock, stopClock, count);
+    waitForInput("hash map inserts done");
+
+    startClock = clock();
+    hashMapGets(items, count);
+    stopClock = clock();
+    printTime("hash map gets", startClock, stopClock, count);
+    waitForInput("hash map gets done");
+	
+    hashMapFree(arrayLength);
+    waitForInput("Freed hash map");
 
 	return 0;
 }
@@ -153,5 +175,19 @@ void moduloMapGets(Item *items, int count) {
     for(int i = 0; i < count; i++)
     {        
         moduloMapGet(items[i].id);
+    }
+}
+
+void hashMapInserts(Item *items, int count) {
+    for(int i = 0; i < count; i++)
+    {
+        hashMapInsert(items[i]);
+    }
+}
+
+void hashMapGets(Item *items, int count) {
+    for(int i = 0; i < count; i++)
+    {        
+        hashMapGet(items[i].id);
     }
 }

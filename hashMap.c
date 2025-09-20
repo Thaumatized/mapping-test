@@ -1,5 +1,5 @@
 #include "common.h"
-#include "moduloMap.h"
+#include "hashMap.h"
 
 #include <stdbool.h>
 #include <stdlib.h> 
@@ -9,7 +9,7 @@
 static Item *items = NULL;
 static int itemsLength = 0;
 
-void moduloMapInit(int length) {
+void hashMapInit(int length) {
     items = malloc(length * sizeof(Item));
     itemsLength = length;
 
@@ -20,14 +20,30 @@ void moduloMapInit(int length) {
     }
 }
 
-void moduloMapFree() {
+void hashMapFree() {
     for(int i = 0; i < itemsLength; i++) {
     }
     free(items);
 }
 
+static int FNV_1a_32(char* data, int length) {
+    int FNV_prime = 16777619;
+    int FNV_offset_basis = 2166136261;
+    int hash = FNV_offset_basis;
+    for(int index = 0; index < length; index++)
+    {
+        hash = hash ^ data[index];
+        hash = hash * FNV_prime;
+    }
+    return hash;
+}
+
 static int getIndex(int id) {
-    return id % itemsLength;
+    int index = (FNV_1a_32((char*)&id, sizeof id) % itemsLength);
+    if (index < 0) {
+        index += itemsLength;
+    }
+    return index;
 }
 
 static void makeArrayBigger() {
@@ -49,14 +65,14 @@ static void makeArrayBigger() {
     {
         if(oldItems[i].id != DELETED_ITEM_ID && oldItems[i].id != EMPTY_ITEM_ID)
         {
-            moduloMapInsert(oldItems[i]);
+            hashMapInsert(oldItems[i]);
         }
     }
     
     free(oldItems);
 }
 
-void moduloMapInsert(Item item) {
+void hashMapInsert(Item item) {
     int itemIndex = getIndex(item.id);
     int index = itemIndex;
     bool found = false;
@@ -79,11 +95,11 @@ void moduloMapInsert(Item item) {
     else
     {
         makeArrayBigger();
-        moduloMapInsert(item);
+        hashMapInsert(item);
     }
 }
 
-void moduloMapDelete(int id) {
+void hashMapDelete(int id) {
     int itemIndex = getIndex(id);
     int index = itemIndex;
     bool found = false;
@@ -111,7 +127,7 @@ void moduloMapDelete(int id) {
     }
 }
 
-Item moduloMapGet(int id) {
+Item hashMapGet(int id) {
     int itemIndex = getIndex(id);
     int index = itemIndex;
     bool found = false;
