@@ -1,0 +1,70 @@
+Knife
+Hunting Knife
+Icepick
+Dagger
+Cleaver
+Shortsword
+Longsword
+Greatsword
+Claymore
+Scimitar
+Katana
+Messer
+Karambit
+Gladius
+Kopis
+Falchion
+Hunting Sword
+Seax
+Cutlass
+Rapier
+
+Straight Bow
+Recurve Bow
+Reflex Bow
+Long Bow
+Crossbow
+Hunting Bow
+Horse bow
+
+Hammer
+Warhammer
+Club
+Mace
+Morning Star
+Baton
+Quarterstaff
+
+Hammer Axe
+Splitting Axe
+Felling Axe
+Survival Axe
+Waraxe
+Battleaxe
+
+Halberd
+Trident
+Pike
+Half-Pike
+Glaive
+Swordstaff
+Boar Spear
+Dagger Axe
+Poleaxe
+Pickaxe
+Iceaxe
+
+Wand
+Staff
+Book
+Ring
+
+Shurkien
+Throwing Spear
+Throwing Knife
+Throwing Axe
+Tomahawk
+Kunai
+Bola
+Sling
+Stone
