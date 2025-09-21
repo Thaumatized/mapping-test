@@ -11,6 +11,13 @@
 #include "moduloMap.h"
 #include "hashMap.h"
 
+int arrayLength = 1024;
+int maxId = 1024;
+int idStep = 0;
+int count = 512;
+bool stringBased = false;
+bool stringBasedHash = false;
+
 int main(int argc, char *argv[])
 {
 	// Rand init
@@ -18,11 +25,6 @@ int main(int argc, char *argv[])
 	srand(t);
 	
     // Reading arguments
-	int arrayLength = 1024;
-    int maxId = 1024;
-    int idStep = 0;
-	int count = 512;
-
 	for (int i = 1; i < argc; i++)
 	{
 		if (!strcmp(argv[i], "-l"))
@@ -44,6 +46,14 @@ int main(int argc, char *argv[])
 		{
 			count = atoi(argv[i+1]);
 			i++;
+		}
+		if (!strcmp(argv[i], "-t"))
+		{
+			stringBased=true;
+		}
+		if (!strcmp(argv[i], "-h"))
+		{
+			stringBasedHash=true;
 		}
 	}
 
@@ -86,6 +96,7 @@ int main(int argc, char *argv[])
     waitForInput("Prepared items for tests");
 
     // Regular Array
+    /*
     regularArrayInit(arrayLength);
     waitForInput("Initialized regular array");
 
@@ -103,7 +114,8 @@ int main(int argc, char *argv[])
 	
     regularArrayFree(arrayLength);
     waitForInput("Freed regular array");
-
+    */
+   
     // Modulo Map
     moduloMapInit(arrayLength);
     waitForInput("Initialized modulo map");
@@ -124,7 +136,7 @@ int main(int argc, char *argv[])
     waitForInput("Freed modulo map");
 
     // Hash Map
-    hashMapInit(arrayLength);
+    hashMapInit(arrayLength, stringBasedHash);
     waitForInput("Initialized hash map");
 
     startClock = clock();
@@ -170,8 +182,15 @@ void regularArrayInserts(Item *items, int count) {
 
 void regularArrayGets(Item *items, int count) {
     for(int i = 0; i < count; i++)
-    {        
-        regularArrayGet(items[i].id);
+    {
+        if(stringBased)
+        {
+            regularArrayGetByName(items[i].name);
+        }
+        else
+        {
+            regularArrayGet(items[i].id);
+        }
     }
 }
 
@@ -184,8 +203,15 @@ void moduloMapInserts(Item *items, int count) {
 
 void moduloMapGets(Item *items, int count) {
     for(int i = 0; i < count; i++)
-    {        
-        moduloMapGet(items[i].id);
+    {
+        if(stringBased)
+        {
+            moduloMapGetByName(items[i].name);
+        }
+        else
+        {
+            moduloMapGet(items[i].id);
+        }
     }
 }
 
@@ -198,7 +224,14 @@ void hashMapInserts(Item *items, int count) {
 
 void hashMapGets(Item *items, int count) {
     for(int i = 0; i < count; i++)
-    {        
-        hashMapGet(items[i].id);
+    {
+        if(stringBased)
+        {
+            hashMapGetByName(items[i].name);
+        }
+        else
+        {
+            hashMapGet(items[i].id);
+        }
     }
 }

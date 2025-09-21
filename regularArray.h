@@ -9,3 +9,5 @@ void regularArrayInsert(Item item);
 void regularArrayDelete(int id);
 
 Item regularArrayGet(int id);
+
+Item regularArrayGetByName(char *itemName);
