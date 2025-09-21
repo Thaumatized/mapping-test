@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h> 
+#include <string.h>
 
 #include <stdio.h>
 
@@ -140,5 +141,16 @@ Item moduloMapGet(int id) {
     {
         Item item = EMPTY_ITEM;
         return item;
+    }
+}
+
+Item moduloMapGetByName(char *itemName)
+{
+    for(int index = 0; index < itemsLength; index++)
+    {
+        if(items[index].id != EMPTY_ITEM_ID && strcmp(items[index].name, itemName) == 0)
+        {
+            return(items[index]);
+        }
     }
 }

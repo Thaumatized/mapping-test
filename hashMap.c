@@ -3,13 +3,17 @@
 
 #include <stdbool.h>
 #include <stdlib.h> 
+#include <string.h> 
 
 #include <stdio.h>
 
 static Item *items = NULL;
 static int itemsLength = 0;
+static bool stringBased = false;
 
-void hashMapInit(int length) {
+void hashMapInit(int length, bool isStringBased) {
+    stringBased = isStringBased;
+
     items = malloc(length * sizeof(Item));
     itemsLength = length;
 
@@ -46,6 +50,14 @@ static int getIndex(int id) {
     return index;
 }
 
+static int getIndexByName(char* name) {
+    int index = (FNV_1a_32(name, strlen(name)) % itemsLength);
+    if (index < 0) {
+        index += itemsLength;
+    }
+    return index;
+}
+
 static void makeArrayBigger() {
     int oldItemsLength = itemsLength;
 
@@ -73,7 +85,15 @@ static void makeArrayBigger() {
 }
 
 void hashMapInsert(Item item) {
-    int itemIndex = getIndex(item.id);
+    int itemIndex = 0;
+    if(stringBased)
+    {
+        itemIndex = getIndexByName(item.name);
+    }
+    else
+    {
+        itemIndex = getIndex(item.id);
+    }
     int index = itemIndex;
     bool found = false;
     do
@@ -156,5 +176,50 @@ Item hashMapGet(int id) {
     {
         Item item = EMPTY_ITEM;
         return item;
+    }
+}
+
+Item hashMapGetByName(char *itemName) {
+    if(stringBased)
+    {
+        int itemIndex = getIndexByName(itemName);
+        int index = itemIndex;
+        bool found = false;
+        do
+        {
+            if(items[index].id == EMPTY_ITEM_ID)
+            {
+                break; 
+            }
+            else if(strcmp(items[index].name, itemName) == 0)
+            {
+                found = true;
+                break; 
+            }
+            else
+            {
+                index = (index + 1) % itemsLength;
+            }
+        } while (!found && index != itemIndex); 
+
+        if(found)
+        {
+            return items[index];
+        }
+        else
+        {
+            Item item = EMPTY_ITEM;
+            return item;
+        }
+    }
+    else
+    {
+        for(int index = 0; index < itemsLength; index++)
+        {
+            if(items[index].id != EMPTY_ITEM_ID && strcmp(items[index].name, itemName) == 0)
+            {
+                return(items[index]);
+            }
+        }
     }
 }
